@@ -1,40 +1,41 @@
 import json
 
-#Fun to load JSON data
 def load_data(file_path):
     """ Loads a JSON file """
     with open(file_path, "r") as handle:
         return json.load(handle)
 
+def serialize_animal(animal):
+    """ Serialize a single animal object into HTML format """
+    output = '<li class="cards__item">'
+    output += f'<div class="card__title">{animal.get("name", "No Name Provided")}</div>'
+    output += '<p class="card__text">'
+    output += f"<strong>Location:</strong> {', '.join(animal.get('locations', ['No Location Info']))}<br/>"
+    output += f"<strong>Type:</strong> {animal.get('characteristics', {}).get('type', 'No Type Info')}<br/>"
+    output += f"<strong>Diet:</strong> {animal.get('characteristics', {}).get('diet', 'No Diet Info')}<br/>"
+    output += '</p></li>'
+    return output
+
 def html_animal_details(animals_data):
     html_output = ""
     for animal in animals_data:
-        html_output += f"""
-        <li class="animal-detail">
-            <h2>{animal.get('name', 'No Name Provided')}</h2>
-            <p>Diet: {animal.get('characteristics', {}).get('diet', 'No Diet Info')}</p>
-            <p>Location: {animal.get('locations', ['No Location Info'])[0]}</p>
-            <p>Type: {animal.get('characteristics', {}).get('type', 'No Type Info')}</p>
-        </li>
-        """
+        html_output += serialize_animal(animal)
     return html_output
 
-#load the animal data from JSON file
-animals_data = load_data('animals_data.json')
-
-#generates HTML content for animals
-animals_html = html_animal_details(animals_data)
-
-with open('animals_template.html', 'r') as file:  
-    template_content = file.read()
-
+if __name__ == "__main__":
+    animals_data = load_data('animals_data.json')
+    animals_html = html_animal_details(animals_data)
     
-updated_html = template_content.replace('__REPLACE_ANIMALS_INFO__', animals_html)
+    with open('animals_template.html', 'r') as file:
+        template_content = file.read()
+        
+    updated_html = template_content.replace('__REPLACE_ANIMALS_INFO__', animals_html)
+    
+    with open('animals.html', 'w') as file:
+        file.write(updated_html)
+    
+    print("HTML file has been updated.")
 
-with open('animals.html', 'w') as file:
-    file.write(updated_html)
-
-print("HTML file has been updated with animal details.")
 
 
 

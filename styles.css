@@ -1,0 +1,49 @@
+ h1 {
+     text-align: center;
+     font-size: 40pt;
+     font-weight: normal;
+ }
+
+ body {
+     font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+     font-style: normal;
+     font-weight: 400;
+     letter-spacing: 0;
+     padding: 1rem;
+     text-rendering: optimizeLegibility;
+     -webkit-font-smoothing: antialiased;
+     -moz-osx-font-smoothing: grayscale;
+     -moz-font-feature-settings: "liga" on;
+     width: 900px;
+     margin: auto;
+     background-color: #ffe9e9;
+ }
+
+ .cards {
+     list-style: none;
+     margin: 0;
+     padding: 0;
+ }
+
+ .cards__item {
+     background-color: #f9f9f9;
+     margin: 10px;
+     padding: 15px;
+     border: 1px solid #ddd;
+     border-radius: 5px;
+ }
+
+ .card__title {
+     color: gray;
+     font-size: 1.25rem;
+     font-weight: 300;
+     letter-spacing: 2px;
+     text-transform: uppercase;
+ }
+
+ .card__text {
+     flex: 1 1 auto;
+     font-size: 0.95rem;
+     line-height: 2;
+     margin-bottom: 1.25rem;
+ }
