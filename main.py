@@ -15,13 +15,13 @@ def serialize_animal(animal):
     output += f"<strong>Diet:</strong> {animal.get('characteristics', {}).get('diet', 'No Diet Info')}<br/>"
     output += '</p></li>'
     return output
-
+#generates HTML data 
 def html_animal_details(animals_data):
     html_output = ""
     for animal in animals_data:
         html_output += serialize_animal(animal)
     return html_output
-
+#Main function that loads data, updates style 
 if __name__ == "__main__":
     animals_data = load_data('animals_data.json')
     animals_html = html_animal_details(animals_data)
