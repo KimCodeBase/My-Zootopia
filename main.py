@@ -1,12 +1,25 @@
-import json
+import requests
+from dotenv import load_dotenv
+import os
 
-def load_data(file_path):
-    """ Loads a JSON file """
-    with open(file_path, "r") as handle:
-        return json.load(handle)
+# Load environment variables
+load_dotenv()
+
+# Retrieve the API key from environment variables
+API_KEY = os.getenv('API_KEY')
+BASE_URL = "https://api.api-ninjas.com/v1/animals?name="
+
+def fetch_animal_data(animal_name):
+    """Fetch animal data from the API based on the animal name."""
+    headers = {"X-Api-Key": API_KEY}
+    response = requests.get(BASE_URL + animal_name, headers=headers)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        return []
 
 def serialize_animal(animal):
-    """ Serialize a single animal object into HTML format """
+    """Serialize a single animal object into HTML format."""
     output = '<li class="cards__item">'
     output += f'<div class="card__title">{animal.get("name", "No Name Provided")}</div>'
     output += '<p class="card__text">'
@@ -15,27 +28,28 @@ def serialize_animal(animal):
     output += f"<strong>Diet:</strong> {animal.get('characteristics', {}).get('diet', 'No Diet Info')}<br/>"
     output += '</p></li>'
     return output
-#generates HTML data 
-def html_animal_details(animals_data):
+
+def html_animal_details(animals_data, animal_name):
+    """Generate HTML content based on animal data or an error message if no data is found."""
+    if not animals_data:
+        return f"<h2>The animal \"{animal_name}\" doesn't exist.</h2>"
+    
     html_output = ""
     for animal in animals_data:
         html_output += serialize_animal(animal)
     return html_output
-#Main function that loads data, updates style 
+
 if __name__ == "__main__":
-    animals_data = load_data('animals_data.json')
-    animals_html = html_animal_details(animals_data)
-    
-    with open('animals_template.html', 'r') as file:
+    animal_name = input("Enter a name of an animal: ")
+    animals_data = fetch_animal_data(animal_name)
+    animals_html = html_animal_details(animals_data, animal_name)
+
+    with open("animals_template.html", "r") as file:
         template_content = file.read()
-        
-    updated_html = template_content.replace('__REPLACE_ANIMALS_INFO__', animals_html)
-    
-    with open('animals.html', 'w') as file:
+
+    updated_html = template_content.replace("__REPLACE_ANIMALS_INFO__", animals_html)
+
+    with open("animals.html", "w") as file:
         file.write(updated_html)
-    
-    print("HTML file has been updated.")
 
-
-
-
+    print("Website was successfully generated to the file animals.html.")
